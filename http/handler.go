@@ -3,9 +3,9 @@ package http
 // Request abstracts a HTTP request from its implementation
 type Request interface {
 	Headers() map[string]string
-	Body() []byte
+	Body() ([]byte, error)
 	PathParams() map[string]string
-	QueryParams() map[string]string
+	QueryParams() map[string][]string
 }
 
 // Response models everything you might like to return to the

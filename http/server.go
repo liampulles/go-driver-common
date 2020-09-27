@@ -2,12 +2,16 @@ package http
 
 // Server serves HTTP requests
 type Server interface {
-	Start()
+	Start() error
 }
 
-// HandlerMappings describes path mappings to handlers.
+// HandlerMapping describes a routing to a handler.
 // Keys should be the path, and you may template them.
 // For example:
 //     /api/v1/users/{id}
 // will provide path param id.
-type HandlerMappings map[string]Handler
+type HandlerMapping struct {
+	Method      string
+	PathPattern string
+	Handler     Handler
+}
