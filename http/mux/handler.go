@@ -10,29 +10,34 @@ import (
 	"github.com/liampulles/go-driver-common/http"
 )
 
-type goRequest struct {
-	original goHttp.Request
+// GoRequest wraps net/http.Request
+type GoRequest struct {
+	Original goHttp.Request
 }
 
 // Check we implement the interface
-var _ http.Request = &goRequest{}
+var _ http.Request = &GoRequest{}
 
-func (r *goRequest) Headers() map[string]string {
-	return r.Headers()
+// Headers implements the http.Request interface
+func (r *GoRequest) Headers() map[string][]string {
+	return r.Original.Header
 }
 
-func (r *goRequest) Body() ([]byte, error) {
-	body, err := ioutil.ReadAll(r.original.Body)
+// Body implements the http.Request interface
+func (r *GoRequest) Body() ([]byte, error) {
+	body, err := ioutil.ReadAll(r.Original.Body)
 	if err != nil {
 		return nil, fmt.Errorf("ioutil failed: %w", err)
 	}
 	return body, nil
 }
 
-func (r *goRequest) PathParams() map[string]string {
-	return mux.Vars(&r.original)
+// PathParams implements the http.Request interface
+func (r *GoRequest) PathParams() map[string]string {
+	return mux.Vars(&r.Original)
 }
 
-func (r *goRequest) QueryParams() map[string][]string {
-	return r.original.URL.Query()
+// QueryParams implements the http.Request interface
+func (r *GoRequest) QueryParams() map[string][]string {
+	return r.Original.URL.Query()
 }
