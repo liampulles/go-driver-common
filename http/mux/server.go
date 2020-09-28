@@ -64,12 +64,12 @@ func wrapHandler(handler http.Handler) func(res goHttp.ResponseWriter, req *goHt
 }
 
 func adaptResponse(in *http.Response, out goHttp.ResponseWriter) {
+	out.WriteHeader(in.StatusCode)
 	_, err := out.Write(in.Body)
 	if err != nil {
 		out.WriteHeader(500)
 		return
 	}
-	out.WriteHeader(in.StatusCode)
 
 	for k, v := range in.Headers {
 		for _, vi := range v {
